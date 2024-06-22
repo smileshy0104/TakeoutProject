@@ -126,6 +126,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param id
      */
     public void startOrStop(Integer status, Long id) {
+        // 创建一个Employee对象，设置id和status属性
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)

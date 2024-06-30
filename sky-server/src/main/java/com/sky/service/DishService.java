@@ -6,9 +6,16 @@ import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 
+import java.util.List;
+
 public interface DishService {
 
-
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    List<Dish> list(Long categoryId);
     /**
      * 分页查询菜品
      * @param dishPageQuery
@@ -22,4 +29,11 @@ public interface DishService {
      */
     public void saveWithFlavor(DishDTO dishDTO);
 
+
+    /**
+     * 菜品批量删除
+     *
+     * @param ids
+     */
+    public void deleteBatch(List<Long> ids);
 }

@@ -57,6 +57,11 @@ public class DishServiceImpl implements DishService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 根据id查询菜品和对应的口味
+     * @param id
+     * @return
+     */
     @Override
     public DishVO getByIdWithFlavor(Long id) {
         //根据id查询菜品基本信息
@@ -70,6 +75,31 @@ public class DishServiceImpl implements DishService {
 
         return dishVO;
     }
+
+    public void updateWithFlavor(DishDTO dishDTO){
+        Dish dish = new Dish();
+        // 将DTO对象中的属性拷贝到Dish对象中
+        BeanUtils.copyProperties(dishDTO, dish);
+
+        //修改菜品表基本信息
+        dishMapper.update(dish);
+
+        //删除原有的口味数据
+        dishFlavorMapper.deleteByDishId(dishDTO.getId());
+
+        //重新插入口味数据
+        // 获取dishDTO中的口味数据,进行更新
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        // 遍历口味数据,设置dishId
+        if (flavors != null && flavors.size() > 0) {
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            //向口味表插入n条数据
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
+    }
     /**
      * 新增菜品和对应的口味
      * @param dishDTO
@@ -80,6 +110,7 @@ public class DishServiceImpl implements DishService {
         System.out.println("保存菜品");
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
+        dish.setImage("https://www.youtube.com/results?search_query=golang");
 
         //向菜品表插入1条数据
         dishMapper.insert(dish);//后绪步骤实现
@@ -87,6 +118,7 @@ public class DishServiceImpl implements DishService {
         //获取insert语句生成的主键值
         Long dishId = dish.getId();
 
+        // 获取口味数据
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if (flavors != null && flavors.size() > 0) {
             flavors.forEach(dishFlavor -> {

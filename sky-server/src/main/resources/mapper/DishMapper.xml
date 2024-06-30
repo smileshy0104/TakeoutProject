@@ -8,6 +8,7 @@
         values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser}, #{status})
     </insert>
 
+<!--    查询菜品分类-->
     <select id="list" resultType="Dish" parameterType="Dish">
         select * from dish
         <where>

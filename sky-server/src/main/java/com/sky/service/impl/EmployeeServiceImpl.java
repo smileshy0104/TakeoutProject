@@ -120,35 +120,55 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     /**
-     * 启用禁用员工账号
+     * 根据员工ID和状态更新员工账户的启用或禁用状态。
+     * 此方法通过构建一个新的Employee对象来更新数据库中相应员工的状态。
+     * 状态值通常为0（禁用）或1（启用），但此方法的具体实现细节留给了调用者。
      *
-     * @param status
-     * @param id
+     * @param status 员工的新状态，通常为0（禁用）或1（启用）。
+     * @param id 要更新状态的员工的唯一标识符。
      */
     public void startOrStop(Integer status, Long id) {
+        // 根据传入的状态和ID构建一个新的Employee对象
         // 创建一个Employee对象，设置id和status属性
+        // builder模式_使用构造器
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
                 .build();
 
+        // 调用employeeMapper的update方法，更新数据库中相应员工的状态
         employeeMapper.update(employee);
     }
 
+
+/**
+ * 更新员工信息。
+ * 该方法通过接收一个EmployeeDTO对象，将其属性值复制到一个新的Employee对象中，
+ * 并更新员工的最后修改时间和修改人信息，最后通过employeeMapper更新数据库中的员工记录。
+ *
+ * @param employeeDTO 包含待更新员工信息的数据传输对象。
+ * @return 本方法无返回值。
+ */
     /**
      * 编辑员工信息
      * @param employeeDTO
      * @return
      */
     public void Update(EmployeeDTO employeeDTO){
+        // 创建一个新的Employee对象，用于存储待更新的数据。
         Employee employee = new Employee();
+        // 使用BeanUtils.copyProperties方法，将employeeDTO的属性值复制到employee对象中。
         // 对象属性拷贝
         BeanUtils.copyProperties(employeeDTO,employee);
+        // 设置员工的最后修改时间为当前时间。
         employee.setUpdateTime(LocalDateTime.now());
+        // 设置员工的修改人为当前操作用户，通过BaseContext获取当前用户的ID。
         // 设置修改人id，通过获取上下文的id
         employee.setUpdateUser(BaseContext.getCurrentId());
+        // 调用employeeMapper的update方法，更新数据库中的员工记录。
         employeeMapper.update(employee);
     }
+
 
     /**
      * 根据id查询员工

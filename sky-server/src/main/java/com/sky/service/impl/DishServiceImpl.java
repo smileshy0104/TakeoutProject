@@ -37,7 +37,12 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public List<Dish> list(Long categoryId) {
-        return null;
+        // 使用builder构造查询条件
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+        return dishMapper.list(dish);
     }
 
     /**
@@ -52,6 +57,19 @@ public class DishServiceImpl implements DishService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        //根据id查询菜品基本信息
+        Dish dish = dishMapper.getById(id);
+        //根据id查询菜品口味信息
+        List<DishFlavor> dishFlavors = dishFlavorMapper.getByDishId(id);
+        //将查询到的菜品基本信息与菜品口味信息封装到VO中
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish, dishVO);
+        dishVO.setFlavors(dishFlavors);
+
+        return dishVO;
+    }
     /**
      * 新增菜品和对应的口味
      * @param dishDTO

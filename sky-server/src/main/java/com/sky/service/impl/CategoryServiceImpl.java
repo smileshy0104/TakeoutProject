@@ -112,6 +112,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param id
      */
     public void startOrStop(Integer status, Long id) {
+        // 创建一个Category对象，设置id和status
         Category category = Category.builder()
                 .id(id)
                 .status(status)

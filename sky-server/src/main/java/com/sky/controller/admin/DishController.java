@@ -28,7 +28,7 @@ public class DishController {
     private DishService dishService;
 
     /**
-     * 根据分类id查询菜品
+     * 根据分类id查询菜品（菜品分类下拉框）
      * @param categoryId
      * @return
      */
@@ -50,6 +50,20 @@ public class DishController {
         log.info("菜品分页查询：{}", dishPageQueryDTO);
         PageResult pageResult = dishService.pageQuery(dishPageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 根据id查询菜品
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询菜品")
+    public Result<DishVO> getById(@PathVariable Long id) {
+        log.info("根据id查询菜品：{}", id);
+        DishVO dishVO = dishService.getByIdWithFlavor(id);//后绪步骤实现
+        return Result.success(dishVO);
     }
     /**
      * 新增菜品

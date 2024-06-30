@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 @Data
 @ApiModel(description = "员工登录时传递的数据模型")
+// DTO代表请求的参数
 public class EmployeeLoginDTO implements Serializable {
 
     @ApiModelProperty("用户名")
